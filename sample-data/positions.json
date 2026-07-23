@@ -1,0 +1,50 @@
+[
+  {
+    "id": "pos_fullstack",
+    "title": "Senior Full-Stack Engineer",
+    "required_skills": ["react", "node.js", "typescript", "postgres", "docker", "aws"],
+    "min_experience": 5,
+    "location": "Bengaluru",
+    "remote": true
+  },
+  {
+    "id": "pos_frontend",
+    "title": "Frontend Engineer (React)",
+    "required_skills": ["react", "typescript", "css", "redux", "jest"],
+    "min_experience": 3,
+    "location": "Bengaluru",
+    "remote": true
+  },
+  {
+    "id": "pos_backend",
+    "title": "Backend Engineer (Node)",
+    "required_skills": ["node.js", "postgres", "redis", "docker", "kafka"],
+    "min_experience": 4,
+    "location": "Mumbai",
+    "remote": false
+  },
+  {
+    "id": "pos_data",
+    "title": "Data Engineer",
+    "required_skills": ["python", "postgres", "airflow", "spark", "aws"],
+    "min_experience": 4,
+    "location": "Remote",
+    "remote": true
+  },
+  {
+    "id": "pos_devops",
+    "title": "DevOps / Platform Engineer",
+    "required_skills": ["kubernetes", "docker", "terraform", "aws", "ci/cd"],
+    "min_experience": 5,
+    "location": "Bengaluru",
+    "remote": true
+  },
+  {
+    "id": "pos_junior",
+    "title": "Junior Full-Stack Engineer",
+    "required_skills": ["javascript", "react", "node.js"],
+    "min_experience": 0,
+    "location": "Remote",
+    "remote": true
+  }
+]

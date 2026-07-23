@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+sample-data/node_modules/
+sample-data/package*.json
+
+# Large generated scale-test dataset — never commit
+sample-data/candidates-large.xlsx
+*.xlsx
+!sample-data/candidates-sample.xlsx
+
+# Env / secrets
+.env
+.env.local
+*.pem
+
+# Build output
+dist/
+build/
+.next/
+coverage/
+
+# OS / editor
+.DS_Store
+*.log
