@@ -27,21 +27,22 @@ async function run() {
 
   // TODO (candidate): upsert these into your positions table, e.g.
   //
-  // for (const p of positions) {
-  //   await pool.query(
-  //     `insert into positions (id, title, required_skills, min_experience, location, remote)
-  //      values ($1,$2,$3,$4,$5,$6)
-  //      on conflict (id) do update set
-  //        title = excluded.title,
-  //        required_skills = excluded.required_skills,
-  //        min_experience = excluded.min_experience,
-  //        location = excluded.location,
-  //        remote = excluded.remote`,
-  //     [p.id, p.title, p.required_skills, p.min_experience, p.location, p.remote]
-  //   );
-  // }
+  for (const p of positions) {
+    await pool.query(
+      `insert into positions (id, title, required_skills, min_experience, location, remote)
+       values ($1,$2,$3,$4,$5,$6)
+       on conflict (id) do update set
+         title = excluded.title,
+         required_skills = excluded.required_skills,
+         min_experience = excluded.min_experience,
+         location = excluded.location,
+         remote = excluded.remote`,
+      [p.id, p.title, p.required_skills, p.min_experience, p.location, p.remote]
+    );
+  }
 
-  console.log("TODO (candidate): create the positions table and insert these (README §2.4/§5)");
+  // console.log("TODO (candidate): create the positions table and insert these (README §2.4/§5)");
+  console.log(`Successfully seeded ${positions.length} positions.`);
   await pool.end();
 }
 
