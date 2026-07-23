@@ -15,6 +15,11 @@ sign-in.
 > constraints** — not raw output. A small, correct, well-built, well-explained
 > slice beats a large broken one **every single time.**
 
+> **Start here:** a runnable scaffold is already in the repo — `docker compose up`
+> boots Postgres + Mailhog + a Node/TS backend + a React shell. It saves you the
+> boilerplate; **no features are implemented** (that's your job). See
+> [`STARTER.md`](./STARTER.md).
+
 ---
 
 ## Table of contents
