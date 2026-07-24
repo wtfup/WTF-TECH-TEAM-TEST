@@ -1,9 +1,6 @@
 /**
  * Seed the open positions from /sample-data/positions.json (README §2.4).
- *
- * This is a STUB: it loads and prints the positions, but the INSERT is left to
- * you because you own the `positions` table shape (README §5). Wire it up once
- * your migration creates the table.
+ * Idempotent — upserts by id, safe to re-run.
  *
  *   npm run seed
  */
@@ -25,8 +22,6 @@ async function run() {
   const positions: Position[] = JSON.parse(fs.readFileSync(file, "utf8"));
   console.log(`Loaded ${positions.length} positions from sample-data/positions.json`);
 
-  // TODO (candidate): upsert these into your positions table, e.g.
-  //
   for (const p of positions) {
     await pool.query(
       `insert into positions (id, title, required_skills, min_experience, location, remote)
@@ -41,7 +36,6 @@ async function run() {
     );
   }
 
-  // console.log("TODO (candidate): create the positions table and insert these (README §2.4/§5)");
   console.log(`Successfully seeded ${positions.length} positions.`);
   await pool.end();
 }
