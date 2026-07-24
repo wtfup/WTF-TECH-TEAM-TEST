@@ -39,9 +39,10 @@ export default function UploadExcel({ onSuccess }: Props) {
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await api.post("/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      // Do NOT set Content-Type manually. The browser must set
+      // "multipart/form-data; boundary=…" itself — forcing it without the
+      // boundary makes the server unable to parse the file (upload hangs).
+      const res = await api.post("/upload", formData);
 
       const jobId = res.data.jobId;
 
