@@ -17,11 +17,12 @@ export const env = {
   port: parseInt(process.env.PORT ?? "8080", 10),
   databaseUrl: required(
     "DATABASE_URL",
-    "postgres://talentmatch:talentmatch@localhost:5432/talentmatch"
+    // Matches docker-compose's published host port (5433:5432) for local runs.
+    "postgres://talentmatch:talentmatch@localhost:5433/talentmatch"
   ),
   frontendUrl: process.env.FRONTEND_URL ?? "http://localhost:5173",
 
-  // TODO (candidate): wire these into a real Google OAuth 2.0 flow (README §2.1).
+  // Google OAuth 2.0 (README §2.1). Set these in .env — see the README setup steps.
   googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
   googleCallbackUrl:
