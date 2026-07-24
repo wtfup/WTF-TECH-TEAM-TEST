@@ -16,7 +16,7 @@ type Candidate = {
   name: string;
   email: string;
   skills: string[];
-  years_of_experience: number;
+  years_of_experience: number | null;
   seniority: string;
   location: string;
   source_file?: string;
@@ -48,7 +48,10 @@ export default function CandidateDetailPage() {
         ← Back to candidates
       </Link>
 
-      <PageHeader title={c.name} subtitle={`${c.seniority} · ${c.location}`} />
+      <PageHeader
+        title={c.name}
+        subtitle={[c.seniority, c.location].filter(Boolean).join(" · ") || undefined}
+      />
 
       <Card style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 24 }}>
@@ -58,7 +61,7 @@ export default function CandidateDetailPage() {
           </div>
           <div>
             <div style={{ color: colors.muted, fontSize: 13 }}>Experience</div>
-            <div>{c.years_of_experience} years</div>
+            <div>{c.years_of_experience == null ? "—" : `${c.years_of_experience} years`}</div>
           </div>
           <div style={{ flex: 1, minWidth: 220 }}>
             <div style={{ color: colors.muted, fontSize: 13, marginBottom: 4 }}>Skills</div>
