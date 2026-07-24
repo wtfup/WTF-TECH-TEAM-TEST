@@ -22,6 +22,87 @@ sign-in.
 
 ---
 
+## ▶ Running TalentMatch (submission setup)
+
+> This section is the candidate-authored run guide. Design notes and the
+> built/skipped/next breakdown live in [`PLAN.md`](./PLAN.md) and
+> [`ARCHITECTURE.md`](./ARCHITECTURE.md).
+
+### Prerequisites
+- **Docker Desktop** (the one-command path), or Node 20 + a local Postgres 16 for the manual path.
+- A **Google OAuth 2.0 Client** (free — steps below). Sign-in is real; there is no mock auth.
+
+### 1. Configure environment
+```bash
+cp .env.example .env
+```
+Then open `.env` and fill in `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` from the OAuth
+step below. Every other value already has a working local default.
+
+### 2. Set up Google OAuth 2.0 (required for login)
+1. Go to the [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials).
+2. Pick or create a project (top bar).
+3. **Configure the OAuth consent screen** (left nav → *OAuth consent screen*):
+   - User type: **External**; fill in app name + your email; **Save and continue**.
+   - Add your own Google account under **Test users** (while the app is unpublished only test users can sign in).
+4. **Create credentials → OAuth client ID**:
+   - Application type: **Web application**.
+   - **Authorized JavaScript origins:**
+     - `http://localhost:5173`
+     - `http://localhost:8080`
+   - **Authorized redirect URI** (must match exactly):
+     - `http://localhost:8080/auth/google/callback`
+5. Click **Create**, copy the **Client ID** and **Client secret** into `.env`:
+   ```env
+   GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+   GOOGLE_CLIENT_SECRET=your-client-secret
+   GOOGLE_CALLBACK_URL=http://localhost:8080/auth/google/callback
+   ```
+   The `GOOGLE_CALLBACK_URL` and the Authorized redirect URI **must be identical** — a
+   mismatch is the #1 cause of `redirect_uri_mismatch` at sign-in.
+
+### 3. Start the stack
+```bash
+docker compose up            # Postgres + Mailhog + backend (:8080) + frontend (:5173)
+```
+In a second terminal, create the schema and load the open positions:
+```bash
+docker compose exec backend npm run migrate   # applies migrations 001–006
+docker compose exec backend npm run seed       # loads sample-data/positions.json
+```
+> Manual (no Docker): run `npm install` in `backend/` and `frontend/`, start a local
+> Postgres, point `DATABASE_URL` at it, then `npm run migrate && npm run seed && npm run dev`
+> in `backend/` and `npm run dev` in `frontend/`.
+
+### 4. Open the app
+| URL | What |
+|-----|------|
+| http://localhost:5173 | Frontend (redirects to `/login` until signed in) |
+| http://localhost:8080/health | API health + DB connectivity |
+| http://localhost:8025 | Mailhog — every outbound email lands here |
+
+### Environment variables
+| Var | Purpose | Local default |
+|-----|---------|---------------|
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth client | *(you provide)* |
+| `GOOGLE_CALLBACK_URL` | OAuth redirect target | `http://localhost:8080/auth/google/callback` |
+| `SESSION_SECRET` | Signs the session cookie | `dev-secret-change-me` |
+| `DATABASE_URL` | Postgres connection | in-compose: `…@postgres:5432`; host psql: port **5433** |
+| `SMTP_HOST` / `SMTP_PORT` | Mailhog SMTP | `mailhog` / `1025` (host: `localhost` / `1025`) |
+| `FRONTEND_URL` | CORS origin + post-login redirect | `http://localhost:5173` |
+| `VITE_API_URL` | Frontend → API base URL | `http://localhost:8080` |
+| `PORT` | Backend port | `8080` |
+
+> Note: Docker maps Postgres to host port **5433** (`5433:5432`) to avoid clashing with a
+> local Postgres. Inside the compose network the backend still reaches it on `5432`.
+
+### Routes
+`/login` · `/` (dashboard) · `/upload` · `/candidates` · `/candidates/:id` ·
+`/positions` · `/positions/:id`. All routes except `/login` require an authenticated
+session; the API mirrors this and returns **401** on protected endpoints without one.
+
+---
+
 ## Table of contents
 1. [The scenario](#1-the-scenario)
 2. [Feature specs (detailed)](#2-feature-specs)
@@ -481,3 +562,10 @@ progress is the single strongest signal you can send.
 ---
 
 **Good luck. Show us how you think.** — WTF Tech Team
+![1](./Screensort/1.png)
+![2](./Screensort/2.png)
+![3](./Screensort/3.png)
+![4](./Screensort/4.png)
+![5](./Screensort/5.png)
+![6](./Screensort/6.png)
+![7](./Screensort/7.png)
